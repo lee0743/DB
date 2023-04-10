@@ -1,5 +1,5 @@
 /* 박지성이 구매한 도서의 출판사 수*/
-SELECT COUNT(publisher)
+SELECT COUNT(DISTINCT publisher)
 FROM Orders, Customer, Book
 WHERE Orders.custid = Customer.custid AND Orders.bookid = Book.bookid AND Customer.name LIKE '박지성';
 
