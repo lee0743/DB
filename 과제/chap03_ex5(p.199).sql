@@ -4,10 +4,9 @@ CREATE TABLE Theater(
     loc VARCHAR2(20)
 );
 
-
 CREATE TABLE Cinema(
     tid NUMBER NOT NULL,
-    cid NUMBER CHECK (price BETWEEN 1 AND 10) PRIMARY KEY,
+    cid NUMBER PRIMARY KEY,
     title VARCHAR2(20),
     price NUMBER CHECK (price <= 20000),
     seat NUMBER,
@@ -16,21 +15,45 @@ CREATE TABLE Cinema(
 
 CREATE TABLE Customer(
   custid NUMBER PRIMARY KEY,
-  name VARCHAR2(20),
+  custname VARCHAR2(20),
   addr VARCHAR2(20)
 );
   
 CREATE TABLE Reservation(
   	tid NUMBER NOT NULL,
-    cid NUMBER CHECK (price BETWEEN 1 AND 10) NOT NULL,
+    cid NUMBER NOT NULL,
   	custid NUMBER NOT NULL,
     seatnum NUMBER NOT NULL,
-  	date DATE
-    FOREIGN KEY (tid) REFERENCES Theater(tid) ON DELETE CASCADE,
-  	FOREIGN KEY (cid) REFERENCES Cinema(cid) ON DELETE CASCADE,
-  	FOREIGN KEY (custid) REFERENCES Customer(custid) ON DELETE CASCADE,
+  	orderdate DATE,
+    FOREIGN KEY (tid) 
+    REFERENCES Theater(tid) ON DELETE CASCADE,
+  	FOREIGN KEY (cid) 
+    REFERENCES Cinema(cid) ON DELETE CASCADE,
+  	FOREIGN KEY (custid)
+    REFERENCES Customer(custid) ON DELETE CASCADE,
   	PRIMARY KEY (custid, seatnum)
  );
+
+INSERT INTO Theater VALUES (1, '롯데', '잠실');
+INSERT INTO Theater VALUES (2, '메가', '강남');
+INSERT INTO Theater VALUES (3, '대한', '잠실');
+
+INSERT INTO Cinema VALUES (1, 1, '어려운 영화', 15000, 48);
+INSERT INTO Cinema VALUES (3, 1, '멋진 영화', 7500, 120);
+INSERT INTO Cinema VALUES (3, 2, '재밌는 영화', 8000, 110);
+
+INSERT INTO Customer VALUES (3, '홍길동', '강남');
+INSERT INTO Customer VALUES (4, '김철수', '잠실');
+INSERT INTO Customer VALUES (9, '박영희', '강남');
+
+INSERT INTO Reservation VALUES (3, 2, 3, 15, TO_DATE('2020-09-01', 'yyyy-mm-dd'));
+INSERT INTO Reservation VALUES (3, 3, 4, 16, TO_DATE('2014-09-01', 'yyyy-mm-dd'));
+INSERT INTO Reservation VALUES (1, 1, 9, 48, TO_DATE('2014-09-01', 'yyyy-mm-dd'));
+
+SELECT * FROM Theater;
+SELECT * FROM Cinema;
+SELECT * FROM Customer;
+SELECT * FROM Reservation;
 
 /* 1-1 */
  SELECT tname, loc
@@ -44,16 +67,16 @@ WHERE loc='잠실';
 /* 1-3 */
 SELECT name
 FROM Customer
-WHERE loc='잠실'
+WHERE addr='잠실'
 ORDER BY name;
 
 /* 1-4 */
 SELECT tid, cid, title
 FROM Cinema
-WHERE 가격 <=8000;
+WHERE price <=8000;
 
 /* 1-5 */
-SELECT DISTINCT Theater.loc Customer.addr
+SELECT DISTINCT loc addr
 FROM Theater, Customer
 WHERE Theater.loc = Customer.addr;
 
@@ -68,19 +91,19 @@ FROM Cinema;
 /* 2-3 */
 SELECT COUNT(custid)
 FROM Reservation
-WHERE 날짜='2020-09-01';
+WHERE orderdate LIKE TO_DATE('2020-09-01', 'yyyy-mm-dd');
 
 /* 3-1 */
-SELECT Cinema.title
+SELECT title
 FROM Theater, Cinema
 WHERE Theater.tid = Cinema.tid
 AND tname = '대한';
 
 /* 3-2 */
-SELECT Customer.name
+SELECT name
 FROM Theater, Reservation, Customer
 WHERE Theater.tid = Reservation.tid
-AND Cuustomer.custid = Reservation.custid
+AND Customer.custid = Reservation.custid
 AND tname = '대한';
 
 /* 3-3 */
@@ -92,10 +115,10 @@ AND Theater.tid = Cinema.tid
 AND tname = '대한';
 
 /* 4-1 */
-SELECT Theater.tname, COUNT(tid)
+SELECT tname, COUNT(tid)
 FROM Theater, Cinema
-WHERE Theater.tid = Cinema.cid
-GROUP BY tname;
+WHERE Theater.tid = Cinema.cid;
+GROUP BY tid;
 
 /* 4-2 */
 SELECT DISTINCT tname, cid
@@ -104,10 +127,10 @@ WHERE Theater.tid = Cinema.tid
 AND loc = '잠실';
 
 /* 4-3 */
-SELECT Theater.tname, COUNT(*)
+SELECT tname, COUNT(*)
 FROM Theater, Reservation
 WHERE Theater.tid = Reservation.tid
-AND date='2020-09-01'
+AND date LIKE '2020-09-01'
 GROUP BY Reservation.tid, Theater.tname;
 
 /* 4-4 */
@@ -115,5 +138,5 @@ SELECT MAX(COUNT(custid))
 FROM Theater, Reservation
 WHERE Cinema.tid = Reservation.tid
 AND Cinema.cid = Reservation.cid
-AND date='2020-09-01'
+AND date LIKE TO_DATE('2020-09-01', 'yyyy-mm-dd')
 GROUP BY title;
