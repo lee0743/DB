@@ -46,9 +46,9 @@ INSERT INTO Customer VALUES (3, '홍길동', '강남');
 INSERT INTO Customer VALUES (4, '김철수', '잠실');
 INSERT INTO Customer VALUES (9, '박영희', '강남');
 
-INSERT INTO Reservation VALUES (3, 2, 3, 15, TO_DATE('2020-09-01', 'yyyy-mm-dd'));
-INSERT INTO Reservation VALUES (3, 3, 4, 16, TO_DATE('2014-09-01', 'yyyy-mm-dd'));
-INSERT INTO Reservation VALUES (1, 1, 9, 48, TO_DATE('2014-09-01', 'yyyy-mm-dd'));
+INSERT INTO Reservation VALUES (3, 2, 3, 15, '2020-09-01');
+INSERT INTO Reservation VALUES (3, 3, 4, 16, '2014-09-01');
+INSERT INTO Reservation VALUES (1, 1, 9, 48, '2014-09-01');
 
 SELECT * FROM Theater;
 SELECT * FROM Cinema;
@@ -91,7 +91,7 @@ FROM Cinema;
 /* 2-3 */
 SELECT COUNT(custid)
 FROM Reservation
-WHERE orderdate LIKE TO_DATE('2020-09-01', 'yyyy-mm-dd');
+WHERE orderdate LIKE '2020-09-01';
 
 /* 3-1 */
 SELECT title
@@ -138,5 +138,6 @@ SELECT MAX(COUNT(custid))
 FROM Theater, Reservation
 WHERE Cinema.tid = Reservation.tid
 AND Cinema.cid = Reservation.cid
-AND date LIKE TO_DATE('2020-09-01', 'yyyy-mm-dd')
+AND date LIKE '2020-09-01'
 GROUP BY title;
+
