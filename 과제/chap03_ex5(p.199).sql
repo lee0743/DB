@@ -1,38 +1,36 @@
 CREATE TABLE Theater(
-    tid NUMBER PRIMARY KEY,
+    tid NUMBER NOT NULL PRIMARY KEY,
     tname VARCHAR2(20),
     loc VARCHAR2(20)
 );
 
 CREATE TABLE Cinema(
     tid NUMBER NOT NULL,
-    cid NUMBER PRIMARY KEY,
+    cid NUMBER NOT NULL CHECK (cid BETWEEN 1 AND 10),
     title VARCHAR2(20),
     price NUMBER CHECK (price <= 20000),
     seat NUMBER,
+    PRIMARY KEY(tid, cid),
     FOREIGN KEY (tid) REFERENCES Theater(tid) ON DELETE CASCADE
 );
 
 CREATE TABLE Customer(
-  custid NUMBER PRIMARY KEY,
+  custid NUMBER NOT NULL PRIMARY KEY,
   custname VARCHAR2(20),
   addr VARCHAR2(20)
 );
-  
+
 CREATE TABLE Reservation(
   	tid NUMBER NOT NULL,
     cid NUMBER NOT NULL,
   	custid NUMBER NOT NULL,
-    seatnum NUMBER NOT NULL,
+    seatnum NUMBER NOT NULL UNIQUE,
   	orderdate DATE,
-    FOREIGN KEY (tid) 
-    REFERENCES Theater(tid) ON DELETE CASCADE,
-  	FOREIGN KEY (cid) 
-    REFERENCES Cinema(cid) ON DELETE CASCADE,
-  	FOREIGN KEY (custid)
-    REFERENCES Customer(custid) ON DELETE CASCADE,
-  	PRIMARY KEY (custid, seatnum)
+    FOREIGN KEY (tid, cid) REFERENCES Cinema(tid, cid),
+    FOREIGN KEY (custid) REFERENCES Customer(custid),
+  	PRIMARY KEY (tid, cid, custid)
  );
+
 
 INSERT INTO Theater VALUES (1, '롯데', '잠실');
 INSERT INTO Theater VALUES (2, '메가', '강남');
@@ -46,9 +44,9 @@ INSERT INTO Customer VALUES (3, '홍길동', '강남');
 INSERT INTO Customer VALUES (4, '김철수', '잠실');
 INSERT INTO Customer VALUES (9, '박영희', '강남');
 
-INSERT INTO Reservation VALUES (3, 2, 3, 15, '2020-09-01');
-INSERT INTO Reservation VALUES (3, 3, 4, 16, '2014-09-01');
-INSERT INTO Reservation VALUES (1, 1, 9, 48, '2014-09-01');
+INSERT INTO Reservation VALUES (3, 2, 3, 15, TO_DATE('2020-09-01', 'yyyy-mm-dd'));
+INSERT INTO Reservation VALUES (3, 3, 4, 16, TO_DATE('2014-09-01', 'yyyy-mm-dd'));
+INSERT INTO Reservation VALUES (1, 1, 9, 48, TO_DATE('2014-09-01', 'yyyy-mm-dd'));
 
 SELECT * FROM Theater;
 SELECT * FROM Cinema;
