@@ -1,5 +1,5 @@
 CREATE TABLE Theater(
-    tid NUMBER NOT NULL PRIMARY KEY,
+    tid NUMBER PRIMARY KEY,
     tname VARCHAR2(20),
     loc VARCHAR2(20)
 );
@@ -15,7 +15,7 @@ CREATE TABLE Cinema(
 );
 
 CREATE TABLE Customer(
-  custid NUMBER NOT NULL PRIMARY KEY,
+  custid NUMBER PRIMARY KEY,
   custname VARCHAR2(20),
   addr VARCHAR2(20)
 );
@@ -45,7 +45,7 @@ INSERT INTO Customer VALUES (4, '김철수', '잠실');
 INSERT INTO Customer VALUES (9, '박영희', '강남');
 
 INSERT INTO Reservation VALUES (3, 2, 3, 15, TO_DATE('2020-09-01', 'yyyy-mm-dd'));
-INSERT INTO Reservation VALUES (3, 3, 4, 16, TO_DATE('2014-09-01', 'yyyy-mm-dd'));
+INSERT INTO Reservation VALUES (3, 1, 4, 16, TO_DATE('2014-09-01', 'yyyy-mm-dd'));
 INSERT INTO Reservation VALUES (1, 1, 9, 48, TO_DATE('2014-09-01', 'yyyy-mm-dd'));
 
 SELECT * FROM Theater;
